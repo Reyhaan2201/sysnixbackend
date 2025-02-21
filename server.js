@@ -1,5 +1,3 @@
-
-
 const express = require("express");
 const mysql = require("mysql");
 const cors = require("cors");
@@ -12,7 +10,7 @@ const routes = require("./Route/Route");
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors({ origin: "https://automationsysnix.netlify.app/" }));
 app.use(express.static('public'));
 app.use("/", routes);
 app.use(bodyparser.json());
@@ -44,8 +42,6 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage });
-
-
 
 // Database connection
 const db = mysql.createConnection({
@@ -114,7 +110,7 @@ app.post("/admin/admin-form", (req, res) => {
 // User login
 app.post("/login", (req, res) => {
   const { email, password } = req.body;
-           console.log(req.body)
+  console.log(req.body);
   if (!email || !password) {
     return res.status(400).json({ error: 'Please fill all the fields' });
   }
@@ -129,12 +125,10 @@ app.post("/login", (req, res) => {
   });
 });
 
-  
-
 // User signup
 app.post('/signup', async (req, res) => {
   const { name, email, password } = req.body;
- 
+
   const sql = "INSERT INTO log (name, email, password) VALUES (?, ?, ?)";
   db.query(sql, [name, email, password], (err, results) => {
     if (err) {
@@ -144,17 +138,14 @@ app.post('/signup', async (req, res) => {
     res.json({ message: 'User registered successfully' });
   });
 });
-app.get("/sign/name",(req,res)=>
-{
-  const sql1= "SELECT name  FROM log  "
-  db.query(sql1,(err,data)=>
-  {
-    if(err) return res.json(err.message);
+
+app.get("/sign/name", (req, res) => {
+  const sql1 = "SELECT name FROM log";
+  db.query(sql1, (err, data) => {
+    if (err) return res.json(err.message);
     return res.json(data);
-  })
-})
-
-
+  });
+});
 
 // User interface - Add file
 app.post("/addfile", upload.single('image'), (req, res) => {

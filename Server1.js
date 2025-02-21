@@ -7,7 +7,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const app = express();
-app.use(cors());
+app.use(cors({ origin: "https://automationsysnix.netlify.app/" }));
 app.use(bodyParser.json());
 
 const SECRET_KEY = process.env.SECRET_KEY;
